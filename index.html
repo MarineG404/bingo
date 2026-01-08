@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles.css">
+	<title>Bingo</title>
+</head>
+
+<body>
+	<main>
+		<h1>Bingo</h1>
+
+		<section class="card">
+
+			<section class="form-section">
+				<h2>Créer une grille de bingo</h2>
+				<form id="grid-size">
+					<select id="size" name="size" required>
+						<option value="" disabled selected hidden>Choisir la taille de la grille</option>
+						<option value="3">3x3</option>
+						<option value="4">4x4</option>
+						<option value="5">5x5</option>
+					</select>
+				</form>
+			</section>
+
+			<section class="bingo-section" id="bingo-section" style="display:none;">
+				<h2>Votre grille de bingo</h2>
+				<div id="bingo-grid"></div>
+				<button id="download-btn" class="download-btn">Télécharger en PDF</button>
+			</section>
+		</section>
+
+	</main>
+
+	<footer>
+		<img src="avatar.svg" alt="Marine Gonnord Avatar" class="avatar">
+		<p>Made with ❤️ by <a href="https://marinegonnord.fr" target="_blank" rel="noopener noreferrer">Marine
+				Gonnord</a></p>
+	</footer>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+	<script src="script.js"></script>
+
+</body>
+
+</html>
