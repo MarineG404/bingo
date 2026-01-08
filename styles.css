@@ -55,8 +55,6 @@ main {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 		box-sizing: border-box;
 		margin-bottom: 40px;
-		width: 100%;
-		max-width: 600px;
 
 		.form-section {
 			display: flex;
@@ -89,24 +87,17 @@ main {
 			align-items: center;
 			gap: 16px;
 
-			h2 {
-				text-align: center;
-				font-size: 32px;
-			}
-
 			.bingo-form {
 				display: grid;
-				grid-gap: 10px;
-				width: 100%;
+				grid-gap: 12px;
 
 				.bingo-input {
-					padding: 14px;
-					font-size: 18px;
+					padding: 18px;
+					font-size: 20px;
 					border: 1px solid var(--border);
 					border-radius: 8px;
 					text-align: center;
 					background: #fff;
-					min-width: 0;
 					width: 100%;
 					box-sizing: border-box;
 				}
