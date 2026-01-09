@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="styles.css?v=1.0.4">
+	<link rel="stylesheet" href="styles.css?v=1.0.5">
 	<!-- remixicon v4.8 -->
 	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet">
 	<title>Bingo</title>
@@ -12,7 +12,7 @@
 
 <body>
 	<main>
-		<h1>Bingo</h1>
+		<h1><i class="ri-trophy-line"></i> Bingo</h1>
 
 		<section class="header-container">
 
@@ -34,7 +34,7 @@
 		<section class="card">
 
 			<section class="form-section">
-				<h2>Créer une grille de bingo</h2>
+				<h2><i class="ri-grid-line"></i> Créer une grille de bingo</h2>
 				<form id="grid-size">
 					<select id="size" name="size" required>
 						<option value="" disabled selected hidden>Choisir la taille de la grille</option>
@@ -48,13 +48,13 @@
 					<label for="random">Mélanger la grille aléatoirement lors du téléchargement PDF</label>
 				</div>
 				<div class="image-input">
-					<label for="imageInput">Add image :</label>
+					<label for="imageInput">Choisir un logo</label>
 					<input type="file" id="imageInput" accept="image/*">
 				</div>
 			</section>
 
 			<section class="bingo-section" id="bingo-section" style="display:none;">
-				<h2>Votre grille de bingo</h2>
+				<h2><i class="ri-file-list-3-line"></i> Votre grille de bingo</h2>
 				<div id="bingo-grid"></div>
 				<button id="download-btn" class="download-btn">Télécharger en PDF</button>
 			</section>
@@ -71,7 +71,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
-	<script src="script.js?v=1.0.4"></script>
+	<script src="script.js?v=1.0.5"></script>
 
 </body>
 
