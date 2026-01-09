@@ -58,8 +58,10 @@ if (pdfButton) {
 }
 
 function generatePDF() {
-	if (typeof html2pdf === 'undefined') {
-		alert('html2pdf n\'est pas chargé');
+	const { jsPDF } = window.jspdf;
+
+	if (typeof jsPDF === 'undefined') {
+		alert('jsPDF n\'est pas chargé');
 		return;
 	}
 
@@ -73,11 +75,7 @@ function generatePDF() {
 	const size = getGridSize();
 	const center = Math.floor(size / 2);
 
-	const clone = bingoForm.cloneNode(true);
-	clone.style.display = 'grid';
-	clone.className = 'clone';
-
-	const inputs = clone.querySelectorAll('input');
+	const inputs = bingoForm.querySelectorAll('input');
 
 	let values = [];
 	inputs.forEach((input, index) => {
@@ -92,50 +90,73 @@ function generatePDF() {
 		values = values.sort(() => Math.random() - 0.5);
 	}
 
+	const tableData = [];
 	let valueIndex = 0;
-	inputs.forEach((input, index) => {
-		const row = Math.floor(index / size);
-		const col = index % size;
 
-		const div = document.createElement('div');
-		div.className = 'bingo-cell';
-
-		if (row === center && col === center) {
-			div.textContent = 'BINGO';
-			div.style.fontSize = '18px';
-		} else {
-			div.textContent = values[valueIndex++];
+	for (let r = 0; r < size; r++) {
+		const row = [];
+		for (let c = 0; c < size; c++) {
+			if (r === center && c === center) {
+				row.push('BINGO');
+			} else {
+				row.push(values[valueIndex++] || '');
+			}
 		}
+		tableData.push(row);
+	}
 
-		input.replaceWith(div);
+	const doc = new jsPDF({
+		orientation: 'landscape',
+		unit: 'mm',
+		format: 'a4'
 	});
 
-	const container = document.createElement('div');
-	container.className = "pdf-container";
+	doc.setFontSize(28);
+	doc.setFont(undefined, 'bold');
+	doc.setTextColor(239, 68, 68);
+	doc.text('Grille de Bingo !', doc.internal.pageSize.getWidth() / 2, 15, { align: 'center' });
 
-	const title = document.createElement('h1');
-	title.textContent = 'Grille de Bingo !';
+	const pageWidth = doc.internal.pageSize.getWidth(); // 297mm
+	const pageHeight = doc.internal.pageSize.getHeight(); // 210mm
+	const horizontalMargin = 20;
+	const startY = 25;
 
-	container.appendChild(title);
-	container.appendChild(clone);
-	document.body.appendChild(container);
+	const availableWidth = pageWidth - (horizontalMargin * 2);
+	const availableHeight = pageHeight - startY - 20;
 
-	const options = {
-		margin: 10,
-		filename: `bingo-${Date.now()}.pdf`,
-		image: { type: 'jpeg', quality: 0.98 },
-		html2canvas: {
-			scale: 3,
-			useCORS: true
+	const padding = size === 3 ? 12 : size === 4 ? 10 : 8;
+	const cellWidth = availableWidth / size;
+	const cellHeight = availableHeight / size;
+
+	doc.autoTable({
+		startY: startY,
+		head: [],
+		body: tableData,
+		theme: 'grid',
+		styles: {
+			fontSize: size === 3 ? 18 : size === 4 ? 15 : 13,
+			cellPadding: padding,
+			halign: 'center',
+			valign: 'middle',
+			lineColor: [239, 68, 68],
+			lineWidth: 1,
+			textColor: [31, 41, 55],
+			minCellHeight: cellHeight
 		},
-		jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-	};
+		columnStyles: Array.from({ length: size }, () => ({
+			cellWidth: cellWidth
+		})),
+		margin: {
+			left: horizontalMargin,
+			right: horizontalMargin
+		},
+		tableWidth: 'wrap',
+		didParseCell: function (data) {
+			if (data.cell.raw === 'BINGO') {
+				data.cell.styles.fontStyle = 'normal';
+			}
+		}
+	});
 
-	html2pdf()
-		.set(options)
-		.from(container)
-		.save()
-		.finally(() => {
-			container.remove();
-		});
+	doc.save(`bingo-${Date.now()}.pdf`);
 }
