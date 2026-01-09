@@ -57,6 +57,23 @@ if (pdfButton) {
 	pdfButton.addEventListener('click', generatePDF);
 }
 
+// Stocker l'image uploadée
+let uploadedImage = null;
+const imageInput = document.getElementById('imageInput');
+
+if (imageInput) {
+	imageInput.addEventListener('change', function (e) {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = function (event) {
+				uploadedImage = event.target.result;
+			};
+			reader.readAsDataURL(file);
+		}
+	});
+}
+
 function generatePDF() {
 	const { jsPDF } = window.jspdf;
 
@@ -154,6 +171,21 @@ function generatePDF() {
 		didParseCell: function (data) {
 			if (data.cell.raw === 'BINGO') {
 				data.cell.styles.fontStyle = 'normal';
+				// Si on a une image, vider le texte dès le parsing
+				if (uploadedImage) {
+					data.cell.text = '';
+				}
+			}
+		},
+		didDrawCell: function (data) {
+			if (data.cell.raw === 'BINGO' && uploadedImage) {
+				// Calculer la position et la taille de l'image
+				const imgSize = Math.min(data.cell.width, data.cell.height) * 0.7;
+				const imgX = data.cell.x + (data.cell.width - imgSize) / 2;
+				const imgY = data.cell.y + (data.cell.height - imgSize) / 2;
+
+				// Ajouter l'image
+				doc.addImage(uploadedImage, 'PNG', imgX, imgY, imgSize, imgSize);
 			}
 		}
 	});
