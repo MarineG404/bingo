@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles.css" version="1.0.3"> >
+	<!-- remixicon v4.8 -->
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet">
+	<title>Bingo</title>
+</head>
+
+<body>
+	<main>
+		<h1>Bingo</h1>
+
+		<section class="header-container">
+
+			<section class="info">
+				<div class="icon-wrapper">
+					<i class="ri-information-line"></i>
+				</div>
+				<div class="content">
+					<p>Créez et téléchargez votre grille de bingo personnalisée au format PDF.</p>
+					<p>
+						Choisissez la taille de la grille et décidez si vous souhaitez que les cases soient mélangées
+						aléatoirement lors du téléchargement.
+					</p>
+				</div>
+			</section>
+
+			<section class="warning">
+				<div class="icon-wrapper">
+					<i class="ri-error-warning-line"></i>
+				</div>
+				<div class="content">
+					<p>La génération de pdf n'est pas encore disponible sur les navigateurs mobiles à moins de se mettre
+						en
+						mode ordinateur.</p>
+				</div>
+			</section>
+
+		</section>
+
+		<section class="card">
+
+			<section class="form-section">
+				<h2>Créer une grille de bingo</h2>
+				<form id="grid-size">
+					<select id="size" name="size" required>
+						<option value="" disabled selected hidden>Choisir la taille de la grille</option>
+						<option value="3">3x3</option>
+						<option value="4">4x4</option>
+						<option value="5">5x5</option>
+					</select>
+				</form>
+				<div>
+					<input type="checkbox" id="random" name="random" checked>
+					<label for="random">Mélanger la grille aléatoirement lors du téléchargement PDF</label>
+				</div>
+				<div class="image-input">
+					<label for="imageInput">Add image :</label>
+					<input type="file" id="imageInput" accept="image/*">
+				</div>
+			</section>
+
+			<section class="bingo-section" id="bingo-section" style="display:none;">
+				<h2>Votre grille de bingo</h2>
+				<div id="bingo-grid"></div>
+				<button id="download-btn" class="download-btn">Télécharger en PDF</button>
+			</section>
+		</section>
+
+	</main>
+
+	<footer>
+		<img src="avatar.svg" alt="Marine Gonnord Avatar" class="avatar">
+		<p>Made with ❤️ by <a href="https://marinegonnord.fr" target="_blank" rel="noopener noreferrer">Marine
+				Gonnord</a> pour sa maman</p>
+	</footer>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+	<script src="script.js"></script>
+
+</body>
+
+</html>
