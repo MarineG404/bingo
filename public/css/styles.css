@@ -121,6 +121,23 @@ main {
 			text-align: center;
 			margin-bottom: 16px;
 
+			.form-controls {
+				display: flex;
+				justify-content: center;
+				gap: 12px;
+				flex-wrap: wrap;
+
+				button {
+					padding: 12px 20px;
+					font-size: 18px;
+					border: 1px solid var(--border);
+					border-radius: var(--border-radius);
+					background: var(--bg);
+					cursor: pointer;
+					color: var(--text);
+				}
+			}
+
 			form {
 				display: flex;
 				justify-content: center;
@@ -215,7 +232,6 @@ main {
 					box-sizing: border-box;
 					color: var(--text);
 				}
-
 
 			}
 

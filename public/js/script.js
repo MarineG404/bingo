@@ -154,6 +154,46 @@ function generateCSV() {
 	document.body.removeChild(link);
 }
 
+const importCsvButton = document.getElementById('import-csv-btn');
+
+if (importCsvButton) {
+	importCsvButton.addEventListener('click', importCSV);
+}
+
+function importCSV(){
+	const fileInput = document.createElement('input');
+	fileInput.type = 'file';
+	fileInput.accept = '.csv,text/csv';
+
+	fileInput.addEventListener('change', function (e) {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = function (event) {
+				const csvContent = event.target.result;
+				const rows = csvContent.split('\n').map(row => row.split(',').map(cell => cell.replace(/(^"|"$)/g, '').replace(/""/g, '"')));
+				const size = rows.length;
+				document.getElementById('size').value = size;
+				generateForm();
+
+				const bingoForm = document.getElementById('bingo-form');
+				rows.forEach((row, r) => {
+					row.forEach((cell, c) => {
+						const input = bingoForm.querySelector(`input[name="cell-${r}-${c}"]`);
+						if (input && !(r === Math.floor(size / 2) && c === Math.floor(size / 2))) {
+							input.value = cell;
+						}
+					});
+				});
+			};
+			reader.readAsText(file);
+		}
+	});
+
+	fileInput.click();
+}
+
+
 const pdfButton = document.getElementById('download-btn');
 
 if (pdfButton) {

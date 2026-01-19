@@ -43,14 +43,18 @@
 
 			<section class="form-section">
 				<h2><i class="ri-grid-line"></i> Créer une grille de bingo</h2>
-				<form id="grid-size">
-					<select id="size" name="size" required>
-						<option value="" disabled selected hidden>Choisir la taille de la grille</option>
-						<option value="3">3x3</option>
-						<option value="4">4x4</option>
-						<option value="5">5x5</option>
-					</select>
-				</form>
+				<div class="form-controls">
+					<form id="grid-size">
+						<select id="size" name="size" required>
+							<option value="" disabled selected hidden>Choisir la taille de la grille</option>
+							<option value="3">3x3</option>
+							<option value="4">4x4</option>
+							<option value="5">5x5</option>
+						</select>
+					</form>
+					<button id="import-csv-btn"><i class="ri-file-list-3-line"></i>Importer CSV</button>
+				</div>
+
 				<div>
 					<input type="checkbox" id="random" name="random" checked>
 					<label for="random">Mélanger la grille aléatoirement lors du téléchargement PDF</label>
