@@ -129,6 +129,10 @@ function generateCSV() {
 		return;
 	}
 
+	if (uploadedImage) {
+		alert('Note : L\'image ne sera pas incluse dans le CSV (format texte uniquement)');
+	}
+
 	const { values, size, center } = result;
 	const tableData = createTableData(values, size, center);
 
@@ -160,7 +164,7 @@ if (importCsvButton) {
 	importCsvButton.addEventListener('click', importCSV);
 }
 
-function importCSV(){
+function importCSV() {
 	const fileInput = document.createElement('input');
 	fileInput.type = 'file';
 	fileInput.accept = '.csv,text/csv';
@@ -185,6 +189,8 @@ function importCSV(){
 						}
 					});
 				});
+
+				alert('CSV importé ! N\'oubliez pas de réimporter votre image si vous en aviez une.');
 			};
 			reader.readAsText(file);
 		}
