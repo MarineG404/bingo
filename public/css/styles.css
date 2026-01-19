@@ -198,7 +198,7 @@ main {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			gap: 16px;
+			gap: 26px;
 
 			.bingo-form {
 				display: grid;
@@ -215,6 +215,15 @@ main {
 					box-sizing: border-box;
 					color: var(--text);
 				}
+
+
+			}
+
+			.actions {
+				display: flex !important;
+				justify-content: center;
+				gap: 16px;
+				flex-wrap: wrap;
 			}
 
 			.download-btn {

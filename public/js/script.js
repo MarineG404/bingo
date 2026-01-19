@@ -50,15 +50,53 @@ function generateForm(event) {
 	bingoGrid.appendChild(form);
 }
 
+function getBingoValues(isRandom = false) {
+	const bingoForm = document.getElementById('bingo-form');
+	if (!bingoForm) {
+		return null;
+	}
 
-// pdf
-const pdfButton = document.getElementById('download-btn');
+	const size = getGridSize();
+	const center = Math.floor(size / 2);
+	const inputs = bingoForm.querySelectorAll('input');
 
-if (pdfButton) {
-	pdfButton.addEventListener('click', generatePDF);
+	let values = [];
+	inputs.forEach((input, index) => {
+		const row = Math.floor(index / size);
+		const col = index % size;
+		if (row !== center || col !== center) {
+			values.push(input.value || '');
+		}
+	});
+
+	if (isRandom) {
+		values = values.sort(() => Math.random() - 0.5);
+	}
+
+	return { values, size, center };
 }
 
-// Stocker l'image uploadée
+// Utility function to create table data structure
+function createTableData(values, size, center) {
+	const tableData = [];
+	let valueIndex = 0;
+
+	for (let r = 0; r < size; r++) {
+		const row = [];
+		for (let c = 0; c < size; c++) {
+			if (r === center && c === center) {
+				row.push('BINGO');
+			} else {
+				row.push(values[valueIndex++] || '');
+			}
+		}
+		tableData.push(row);
+	}
+
+	return tableData;
+}
+
+// Store uploaded image
 let uploadedImage = null;
 const imageInput = document.getElementById('imageInput');
 
@@ -75,53 +113,71 @@ if (imageInput) {
 	});
 }
 
+// CSV download button listener
+const csvButton = document.getElementById('download-csv-btn');
+
+if (csvButton) {
+	csvButton.addEventListener('click', generateCSV);
+}
+
+function generateCSV() {
+	const isRandom = document.getElementById('random').checked;
+	const result = getBingoValues(isRandom);
+
+	if (!result) {
+		alert('Please create a bingo grid first');
+		return;
+	}
+
+	const { values, size, center } = result;
+	const tableData = createTableData(values, size, center);
+
+	let csvContent = tableData.map(row =>
+		row.map(cell => {
+			const escaped = cell.replace(/"/g, '""');
+			return escaped.includes(',') || escaped.includes('"') || escaped.includes('\n')
+				? `"${escaped}"`
+				: escaped;
+		}).join(',')
+	).join('\n');
+
+	const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+	const link = document.createElement('a');
+	const url = URL.createObjectURL(blob);
+
+	link.setAttribute('href', url);
+	link.setAttribute('download', `bingo-${Date.now()}.csv`);
+	link.style.visibility = 'hidden';
+
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+}
+
+const pdfButton = document.getElementById('download-btn');
+
+if (pdfButton) {
+	pdfButton.addEventListener('click', generatePDF);
+}
+
 function generatePDF() {
 	const { jsPDF } = window.jspdf;
 
 	if (typeof jsPDF === 'undefined') {
-		alert('jsPDF n\'est pas chargé');
-		return;
-	}
-
-	const bingoForm = document.getElementById('bingo-form');
-	if (!bingoForm) {
-		alert('Veuillez d\'abord créer une grille de bingo');
+		alert('jsPDF is not loaded');
 		return;
 	}
 
 	const isRandom = document.getElementById('random').checked;
-	const size = getGridSize();
-	const center = Math.floor(size / 2);
+	const result = getBingoValues(isRandom);
 
-	const inputs = bingoForm.querySelectorAll('input');
-
-	let values = [];
-	inputs.forEach((input, index) => {
-		const row = Math.floor(index / size);
-		const col = index % size;
-		if (row !== center || col !== center) {
-			values.push(input.value || '');
-		}
-	});
-
-	if (isRandom) {
-		values = values.sort(() => Math.random() - 0.5);
+	if (!result) {
+		alert('Please create a bingo grid first');
+		return;
 	}
 
-	const tableData = [];
-	let valueIndex = 0;
-
-	for (let r = 0; r < size; r++) {
-		const row = [];
-		for (let c = 0; c < size; c++) {
-			if (r === center && c === center) {
-				row.push('BINGO');
-			} else {
-				row.push(values[valueIndex++] || '');
-			}
-		}
-		tableData.push(row);
-	}
+	const { values, size, center } = result;
+	const tableData = createTableData(values, size, center);
 
 	const doc = new jsPDF({
 		orientation: 'landscape',
@@ -132,10 +188,10 @@ function generatePDF() {
 	doc.setFontSize(28);
 	doc.setFont(undefined, 'bold');
 	doc.setTextColor(239, 68, 68);
-	doc.text('Grille de Bingo !', doc.internal.pageSize.getWidth() / 2, 15, { align: 'center' });
+	doc.text('Bingo Grid!', doc.internal.pageSize.getWidth() / 2, 15, { align: 'center' });
 
-	const pageWidth = doc.internal.pageSize.getWidth(); // 297mm
-	const pageHeight = doc.internal.pageSize.getHeight(); // 210mm
+	const pageWidth = doc.internal.pageSize.getWidth();
+	const pageHeight = doc.internal.pageSize.getHeight();
 	const horizontalMargin = 20;
 	const startY = 25;
 
